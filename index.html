@@ -9,7 +9,1158 @@
     :root {
       --bg-top: #f7a2c7;
       --bg-mid: #e562aa;
+      --bg-bottom: #c44b99;<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Saham by ARJ</title>
+
+  <style>
+    :root {
+      --bg-top: #f7a2c7;
+      --bg-mid: #e562aa;
       --bg-bottom: #c44b99;
+      --panel-top: rgba(191, 52, 132, 0.9);
+      --panel-bottom: rgba(214, 82, 154, 0.78);
+      --summary-top: rgba(122, 20, 82, 0.96);
+      --summary-bottom: rgba(139, 28, 95, 0.94);
+      --field-top: #351128;
+      --field-mid: #4a1836;
+      --field-bottom: #5e1f43;
+      --white: #fff8fc;
+      --border-light: rgba(255, 255, 255, 0.9);
+      --reset-top: #ead6e0;
+      --reset-bottom: #c9a3b7;
+      --hasil-top: #ffc4de;
+      --hasil-mid: #ff82bb;
+      --hasil-bottom: #ff579f;
+      --export-top: #ffe6f1;
+      --export-mid: #ffb6d6;
+      --export-bottom: #f26aa7;
+      --shadow: 0 18px 40px rgba(88, 14, 59, 0.28);
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 26px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100dvh;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.10), transparent 24%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 48%, var(--bg-bottom) 100%);
+      color: var(--white);
+    }
+
+    .app-shell {
+      width: 100%;
+      min-height: 100dvh;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .phone-card {
+      width: 100%;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: clamp(12px, 2.2vw, 28px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      font-size: clamp(18px, 2vw, 24px);
+      color: rgba(255,255,255,0.96);
+      margin: 4px 0 12px 62px;
+      letter-spacing: 0.4px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.16);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .back-btn {
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      background: linear-gradient(180deg, #fff4fa, #e8bfd4);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 3px 10px rgba(0,0,0,0.18);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .back-btn::before {
+      content: "◀";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #d94d92;
+      font-size: 24px;
+      transform: translateX(-1px);
+    }
+
+    .title {
+      font-weight: 300;
+      line-height: 1.08;
+      font-size: clamp(30px, 5vw, 58px);
+      margin: 0;
+      color: #fffaff;
+      text-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+
+    .form-panel {
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border-radius: 26px;
+      padding: clamp(18px, 3vw, 34px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .stock-row {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .stock-label {
+      text-align: right;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 500;
+    }
+
+    .stock-input-group {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 0;
+      align-items: stretch;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.86);
+      box-shadow: inset 0 0 18px rgba(255, 148, 196, 0.18);
+      background: linear-gradient(180deg, var(--field-top) 0%, var(--field-mid) 52%, var(--field-bottom) 100%);
+    }
+
+    .stock-input-group .field {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      min-height: clamp(58px, 7vw, 80px);
+    }
+
+    .stock-input-group .field:focus {
+      box-shadow: inset 0 0 18px rgba(255, 148, 196, 0.18);
+    }
+
+    .current-price-wrap {
+      border-left: 2px solid rgba(255, 135, 190, 0.9);
+      display: flex;
+      align-items: center;
+    }
+
+    .headers {
+      display: grid;
+      grid-template-columns: 58px 1fr 1fr;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .col-title {
+      font-size: clamp(22px, 3.8vw, 40px);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .entry-row {
+      display: grid;
+      grid-template-columns: 58px 1fr 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .row-index {
+      font-size: clamp(26px, 3.8vw, 44px);
+      text-align: center;
+      color: rgba(255,255,255,0.98);
+    }
+
+    .field {
+      width: 100%;
+      min-height: clamp(58px, 7vw, 80px);
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-light);
+      outline: none;
+      padding: 10px 16px;
+      font-size: clamp(18px, 2.6vw, 34px);
+      font-style: italic;
+      color: #fff1f7;
+      background: linear-gradient(180deg, var(--field-top) 0%, var(--field-mid) 52%, var(--field-bottom) 100%);
+      box-shadow: inset 0 0 18px rgba(255, 148, 196, 0.18);
+    }
+
+    .field::placeholder {
+      color: rgba(255, 227, 239, 0.7);
+    }
+
+    .field:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.12), inset 0 0 18px rgba(255, 148, 196, 0.18);
+    }
+
+    .summary-panel {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--summary-top), var(--summary-bottom));
+      padding: clamp(18px, 2.8vw, 30px);
+      box-shadow: var(--shadow);
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1.28fr 0.92fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .summary-left {
+      min-width: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-line {
+      display: grid;
+      grid-template-columns: minmax(190px, auto) 1fr;
+      gap: 16px;
+      align-items: baseline;
+      font-size: clamp(22px, 3vw, 46px);
+      line-height: 1.15;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    .summary-line strong {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .summary-line span {
+      font-weight: 500;
+    }
+
+    .summary-total-lot { color: #ffd7e8; }
+    .summary-average { color: #fff0f6; }
+    .summary-total-value { color: #ffffff; }
+    .summary-profit { color: #fff0f6; }
+    .summary-final { color: #ffe6f1; }
+
+    .positive { color: #caffdf; }
+    .negative { color: #ffd0e0; }
+    .neutral { color: #fff0f6; }
+
+    .history-box {
+      border-left: 2px solid rgba(255, 199, 225, 0.65);
+      padding-left: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 100%;
+    }
+
+    .history-title {
+      margin: 0 0 14px;
+      font-size: clamp(22px, 3vw, 38px);
+      color: #ffd8ea;
+      font-weight: 700;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .history-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      font-size: clamp(18px, 2vw, 28px);
+      color: #ffeaf3;
+      min-height: 28px;
+      align-items: start;
+    }
+
+    .history-no {
+      color: #ff8dc2;
+    }
+
+    .history-text.empty {
+      color: rgba(255,255,255,0.35);
+    }
+
+    .note {
+      font-size: clamp(16px, 2vw, 28px);
+      color: rgba(255,255,255,0.95);
+      margin: 16px 2px 28px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .btn {
+      min-height: 78px;
+      border: 0;
+      border-radius: 18px;
+      cursor: pointer;
+      font-size: clamp(20px, 2.6vw, 34px);
+      font-weight: 600;
+      transition: transform 0.15s ease, filter 0.15s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-reset {
+      background: linear-gradient(180deg, var(--reset-top), var(--reset-bottom));
+      color: #ffffff;
+    }
+
+    .btn-result {
+      background: linear-gradient(180deg, var(--hasil-top), var(--hasil-mid) 55%, var(--hasil-bottom));
+      color: #6a123e;
+    }
+
+    .btn-export {
+      background: linear-gradient(180deg, var(--export-top), var(--export-mid) 55%, var(--export-bottom));
+      color: #6a123e;
+    }
+
+    .desktop-hint {
+      text-align: center;
+      margin-top: 14px;
+      color: rgba(255,255,255,0.78);
+      font-size: 14px;
+    }
+
+    .export-sheet {
+      position: fixed;
+      left: -99999px;
+      top: 0;
+      width: 1360px;
+      background: linear-gradient(180deg, #ff9ac6 0%, #ff5ea8 48%, #c84f9b 100%);
+      color: #fff8fc;
+      padding: 36px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .export-card {
+      background: linear-gradient(180deg, rgba(97, 18, 66, 0.96), rgba(124, 28, 87, 0.94));
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(92, 17, 62, 0.18);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .export-headline {
+      font-size: 44px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .export-subtitle {
+      font-size: 26px;
+      margin: 0 0 24px;
+      color: #ffe5f0;
+    }
+
+    .export-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .export-meta-box {
+      background: rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .export-meta-label {
+      display: block;
+      font-size: 20px;
+      color: #ffd8ea;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .export-meta-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .export-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      margin-bottom: 26px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .export-table th,
+    .export-table td {
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 14px 16px;
+      font-size: 22px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .export-table th {
+      background: rgba(255,255,255,0.12);
+      color: #ffe3ef;
+      font-size: 22px;
+    }
+
+    .export-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .export-summary-box {
+      background: rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .export-summary-label {
+      display: block;
+      font-size: 19px;
+      color: #ffd8ea;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .export-summary-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .export-footnote {
+      margin-top: 18px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.82);
+    }
+
+    /* MOBILE COMPACT DESKTOP-LIKE */
+    @media (max-width: 768px) {
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      .app-shell {
+        max-width: 100%;
+        min-height: 100dvh;
+      }
+
+      .phone-card {
+        min-height: 100dvh;
+        height: 100dvh;
+        padding: 8px 10px 10px;
+        gap: 8px;
+        overflow: hidden;
+      }
+
+      .brand {
+        margin: 0 0 4px 38px;
+        font-size: 11px;
+        line-height: 1.1;
+      }
+
+      .top-row {
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .back-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+
+      .back-btn::before {
+        font-size: 14px;
+      }
+
+      .title {
+        font-size: 26px;
+        line-height: 1.05;
+      }
+
+      .form-panel {
+        padding: 10px 12px 10px;
+        border-radius: 20px;
+      }
+
+      .stock-row {
+        grid-template-columns: 0.95fr 1.85fr !important;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: center;
+      }
+
+      .stock-label {
+        text-align: right;
+        font-size: 22px;
+      }
+
+      .stock-input-group {
+        grid-template-columns: 1fr 0.78fr !important;
+      }
+
+      .current-price-wrap {
+        border-left: 2px solid rgba(255, 135, 190, 0.9);
+        border-top: 0;
+      }
+
+      .headers {
+        grid-template-columns: 30px 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+
+      .col-title {
+        font-size: 15px;
+      }
+
+      .entry-row {
+        grid-template-columns: 30px 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .row-index {
+        font-size: 18px;
+      }
+
+      .field,
+      .stock-input-group .field {
+        min-height: 42px;
+        height: 42px;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 10px;
+      }
+
+      .summary-panel {
+        margin-top: 8px;
+        padding: 12px;
+        border-radius: 20px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1.2fr 0.9fr !important;
+        gap: 12px;
+        align-items: start;
+      }
+
+      .summary-left {
+        gap: 8px;
+      }
+
+      .summary-line {
+        grid-template-columns: minmax(105px, auto) 1fr;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .summary-line strong {
+        white-space: nowrap;
+      }
+
+      .history-box {
+        border-left: 2px solid rgba(255, 199, 225, 0.65);
+        border-top: 0;
+        padding-left: 12px;
+        padding-top: 0;
+      }
+
+      .history-title {
+        margin: 0 0 8px;
+        font-size: 13px;
+      }
+
+      .history-list {
+        gap: 6px;
+      }
+
+      .history-row {
+        grid-template-columns: 18px 1fr;
+        gap: 6px;
+        font-size: 10px;
+        min-height: 16px;
+      }
+
+      .note {
+        margin: 8px 0 8px;
+        font-size: 10px;
+        line-height: 1.2;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+      }
+
+      .btn {
+        min-height: 44px;
+        height: 44px;
+        font-size: 12px;
+        border-radius: 14px;
+      }
+
+      .desktop-hint {
+        margin-top: 6px;
+        font-size: 9px;
+      }
+    }
+
+    @media (max-width: 768px) and (max-height: 740px) {
+      .brand {
+        font-size: 10px;
+        margin-left: 36px;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .back-btn {
+        width: 24px;
+        height: 24px;
+      }
+
+      .form-panel {
+        padding: 8px 10px;
+      }
+
+      .stock-label {
+        font-size: 18px;
+      }
+
+      .col-title {
+        font-size: 13px;
+      }
+
+      .field,
+      .stock-input-group .field {
+        min-height: 36px;
+        height: 36px;
+        font-size: 11px;
+        padding: 5px 8px;
+      }
+
+      .entry-row {
+        margin-bottom: 6px;
+      }
+
+      .row-index {
+        font-size: 16px;
+      }
+
+      .summary-panel {
+        padding: 10px;
+      }
+
+      .summary-line {
+        font-size: 12px;
+        gap: 6px;
+        grid-template-columns: minmax(95px, auto) 1fr;
+      }
+
+      .history-title {
+        font-size: 12px;
+      }
+
+      .history-row {
+        font-size: 9px;
+      }
+
+      .btn {
+        min-height: 40px;
+        height: 40px;
+        font-size: 11px;
+      }
+
+      .note {
+        font-size: 9px;
+        margin: 6px 0;
+      }
+
+      .desktop-hint {
+        font-size: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="phone-card">
+      <div class="brand">Kalkulator Saham by ARJ</div>
+
+      <div class="top-row">
+        <button class="back-btn" type="button" aria-label="Kembali" onclick="history.back()"></button>
+        <h1 class="title">Average Calculator</h1>
+      </div>
+
+      <section class="form-panel">
+        <div class="stock-row">
+          <div class="stock-label">Saham :</div>
+          <div class="stock-input-group">
+            <input id="stockName" class="field" type="text" placeholder="Contoh : PTBA" />
+            <div class="current-price-wrap">
+              <input id="currentPrice" class="field" type="number" min="0" step="0.01" placeholder="Current Price" inputmode="decimal" />
+            </div>
+          </div>
+        </div>
+
+        <div class="headers">
+          <div></div>
+          <div class="col-title">Lot :</div>
+          <div class="col-title">Buy Price :</div>
+        </div>
+
+        <div id="rowsContainer"></div>
+      </section>
+
+      <section class="summary-panel" aria-live="polite">
+        <div class="summary-grid">
+          <div class="summary-left">
+            <div class="summary-line summary-total-lot">
+              <strong>Total Lot :</strong>
+              <span id="totalLot">0</span>
+            </div>
+            <div class="summary-line summary-average">
+              <strong>Average Price :</strong>
+              <span id="averagePrice">0</span>
+            </div>
+            <div class="summary-line summary-total-value">
+              <strong>Total Invested : Rp</strong>
+              <span id="totalValue">0</span>
+            </div>
+            <div class="summary-line summary-profit neutral">
+              <strong>Profit/Loss :</strong>
+              <span id="profitLossPercent">0%</span>
+            </div>
+            <div class="summary-line summary-profit neutral">
+              <strong>P/L Value : Rp</strong>
+              <span id="profitLossValue">0</span>
+            </div>
+            <div class="summary-line summary-final neutral">
+              <strong>Final Value : Rp</strong>
+              <span id="finalValue">0</span>
+            </div>
+          </div>
+
+          <div class="history-box">
+            <h2 class="history-title">Buy History</h2>
+            <div class="history-list" id="buyHistoryList"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="note">(*Belum termasuk fee transaksi)</div>
+
+      <div class="actions">
+        <button class="btn btn-reset" type="button" id="resetBtn">Reset</button>
+        <button class="btn btn-result" type="button" id="calcBtn">Hasil</button>
+        <button class="btn btn-export" type="button" id="exportBtn">Export</button>
+      </div>
+
+      <div class="desktop-hint">Responsive untuk mobile dan desktop.</div>
+    </div>
+  </div>
+
+  <div class="export-sheet" id="exportSheet" aria-hidden="true">
+    <div class="export-card">
+      <h1 class="export-headline">Kalkulator Saham by ARJ</h1>
+      <p class="export-subtitle">Average Calculator - Detail Pembelian Saham</p>
+
+      <div class="export-meta">
+        <div class="export-meta-box">
+          <span class="export-meta-label">Saham</span>
+          <span class="export-meta-value" id="exportStockName">-</span>
+        </div>
+        <div class="export-meta-box">
+          <span class="export-meta-label">Tanggal Export</span>
+          <span class="export-meta-value" id="exportDate">-</span>
+        </div>
+      </div>
+
+      <table class="export-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Lot</th>
+            <th>Buy Price</th>
+            <th>Jumlah Saham</th>
+            <th>Total Pembelian</th>
+            <th>P/L Value</th>
+          </tr>
+        </thead>
+        <tbody id="exportTableBody"></tbody>
+      </table>
+
+      <div class="export-summary">
+        <div class="export-summary-box">
+          <span class="export-summary-label">Total Lot</span>
+          <span class="export-summary-value" id="exportTotalLot">0</span>
+        </div>
+        <div class="export-summary-box">
+          <span class="export-summary-label">Average Price</span>
+          <span class="export-summary-value" id="exportAveragePrice">0</span>
+        </div>
+        <div class="export-summary-box">
+          <span class="export-summary-label">Total Invested</span>
+          <span class="export-summary-value" id="exportTotalValue">0</span>
+        </div>
+      </div>
+
+      <div class="export-summary" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="export-summary-box">
+          <span class="export-summary-label">Current Price</span>
+          <span class="export-summary-value" id="exportCurrentPrice">0</span>
+        </div>
+        <div class="export-summary-box">
+          <span class="export-summary-label">Profit/Loss</span>
+          <span class="export-summary-value" id="exportProfitLoss">0%</span>
+        </div>
+        <div class="export-summary-box">
+          <span class="export-summary-label">Final Value</span>
+          <span class="export-summary-value" id="exportFinalValue">0</span>
+        </div>
+      </div>
+
+      <div class="export-footnote">*Belum termasuk fee transaksi</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    const rowsContainer = document.getElementById('rowsContainer');
+    const totalLotEl = document.getElementById('totalLot');
+    const averagePriceEl = document.getElementById('averagePrice');
+    const totalValueEl = document.getElementById('totalValue');
+    const profitLossPercentEl = document.getElementById('profitLossPercent');
+    const profitLossValueEl = document.getElementById('profitLossValue');
+    const finalValueEl = document.getElementById('finalValue');
+    const calcBtn = document.getElementById('calcBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const stockNameInput = document.getElementById('stockName');
+    const currentPriceInput = document.getElementById('currentPrice');
+    const buyHistoryList = document.getElementById('buyHistoryList');
+
+    const exportSheet = document.getElementById('exportSheet');
+    const exportStockName = document.getElementById('exportStockName');
+    const exportDate = document.getElementById('exportDate');
+    const exportTableBody = document.getElementById('exportTableBody');
+    const exportTotalLot = document.getElementById('exportTotalLot');
+    const exportAveragePrice = document.getElementById('exportAveragePrice');
+    const exportTotalValue = document.getElementById('exportTotalValue');
+    const exportCurrentPrice = document.getElementById('exportCurrentPrice');
+    const exportProfitLoss = document.getElementById('exportProfitLoss');
+    const exportFinalValue = document.getElementById('exportFinalValue');
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('id-ID').format(value);
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('id-ID').format(Math.round(value));
+    }
+
+    function formatPercent(value) {
+      if (!Number.isFinite(value)) return '0%';
+      const sign = value > 0 ? '+' : '';
+      return `${sign}${value.toFixed(2)}%`;
+    }
+
+    function normalizeFileName(text) {
+      return String(text).trim().toLowerCase().split(' ').filter(Boolean).join('-');
+    }
+
+    function createRows() {
+      rowsContainer.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const row = document.createElement('div');
+        row.className = 'entry-row';
+        row.innerHTML = `
+          <div class="row-index">${i}.</div>
+          <input class="field lot-input" type="number" min="0" step="1" placeholder="${i === 1 ? 'Contoh : 10' : ''}" inputmode="numeric" />
+          <input class="field price-input" type="number" min="0" step="0.01" placeholder="${i === 1 ? 'Contoh : 2010' : ''}" inputmode="decimal" />
+        `;
+        rowsContainer.appendChild(row);
+      }
+    }
+
+    function collectPurchaseData() {
+      const lotInputs = document.querySelectorAll('.lot-input');
+      const priceInputs = document.querySelectorAll('.price-input');
+      const entries = [];
+
+      lotInputs.forEach((lotInput, index) => {
+        const lot = parseFloat(lotInput.value) || 0;
+        const price = parseFloat(priceInputs[index].value) || 0;
+
+        if (lot > 0 && price > 0) {
+          entries.push({
+            no: index + 1,
+            lot,
+            price,
+            shares: lot * 100,
+            total: lot * 100 * price
+          });
+        }
+      });
+
+      const totalLot = entries.reduce((sum, item) => sum + item.lot, 0);
+      const totalShares = entries.reduce((sum, item) => sum + item.shares, 0);
+      const totalInvested = entries.reduce((sum, item) => sum + item.total, 0);
+      const averagePrice = totalShares > 0 ? Math.round(totalInvested / totalShares) : 0;
+      const currentPrice = parseFloat(currentPriceInput.value) || 0;
+
+      const profitLossPercent = averagePrice > 0 && currentPrice > 0
+        ? ((currentPrice - averagePrice) / averagePrice) * 100
+        : 0;
+
+      const profitLossValue = totalShares > 0 && currentPrice > 0
+        ? (currentPrice - averagePrice) * totalShares
+        : 0;
+
+      const finalValue = totalInvested + profitLossValue;
+
+      return {
+        stockName: stockNameInput.value.trim() || '-',
+        currentPrice,
+        entries,
+        totalLot,
+        totalShares,
+        totalInvested,
+        averagePrice,
+        profitLossPercent,
+        profitLossValue,
+        finalValue
+      };
+    }
+
+    function renderBuyHistory(entries) {
+      buyHistoryList.innerHTML = '';
+      const safeEntries = entries.length
+        ? entries
+        : Array.from({ length: 5 }, (_, i) => ({ no: i + 1, lot: 0, price: 0, total: 0 }));
+
+      safeEntries.forEach((entry) => {
+        const row = document.createElement('div');
+        row.className = 'history-row';
+        const hasValue = entry.lot > 0 && entry.price > 0;
+        const text = hasValue
+          ? `${formatNumber(entry.lot)} lot × ${formatCurrency(entry.price)} = ${formatCurrency(entry.total)}`
+          : '-';
+
+        row.innerHTML = `
+          <span class="history-no">${entry.no}.</span>
+          <span class="history-text ${hasValue ? '' : 'empty'}">${text}</span>
+        `;
+        buyHistoryList.appendChild(row);
+      });
+    }
+
+    function applyProfitLossState(data) {
+      const targets = [
+        profitLossPercentEl.parentElement,
+        profitLossValueEl.parentElement,
+        finalValueEl.parentElement
+      ];
+
+      targets.forEach((line) => {
+        line.classList.remove('positive', 'negative', 'neutral');
+      });
+
+      if (data.profitLossPercent > 0) {
+        targets.forEach((line) => line.classList.add('positive'));
+      } else if (data.profitLossPercent < 0) {
+        targets.forEach((line) => line.classList.add('negative'));
+      } else {
+        targets.forEach((line) => line.classList.add('neutral'));
+      }
+    }
+
+    function calculateAverage() {
+      const data = collectPurchaseData();
+
+      totalLotEl.textContent = formatNumber(data.totalLot);
+      averagePriceEl.textContent = formatNumber(data.averagePrice);
+      totalValueEl.textContent = formatCurrency(data.totalInvested);
+      profitLossPercentEl.textContent = formatPercent(data.profitLossPercent);
+      profitLossValueEl.textContent = formatCurrency(data.profitLossValue);
+      finalValueEl.textContent = formatCurrency(data.finalValue);
+
+      applyProfitLossState(data);
+      renderBuyHistory(data.entries);
+      return data;
+    }
+
+    function resetForm() {
+      stockNameInput.value = '';
+      currentPriceInput.value = '';
+
+      document.querySelectorAll('.lot-input, .price-input').forEach((input) => {
+        input.value = '';
+      });
+
+      totalLotEl.textContent = '0';
+      averagePriceEl.textContent = '0';
+      totalValueEl.textContent = '0';
+      profitLossPercentEl.textContent = '0%';
+      profitLossValueEl.textContent = '0';
+      finalValueEl.textContent = '0';
+
+      applyProfitLossState({ profitLossPercent: 0 });
+      renderBuyHistory([]);
+      stockNameInput.focus();
+    }
+
+    function buildExportTable(data) {
+      exportTableBody.innerHTML = '';
+      const rows = data.entries.length
+        ? data.entries
+        : Array.from({ length: 5 }, (_, i) => ({ no: i + 1, lot: 0, price: 0, shares: 0, total: 0 }));
+
+      rows.forEach((entry) => {
+        const tr = document.createElement('tr');
+        const hasValue = entry.lot > 0 && entry.price > 0;
+        const plValue = hasValue && data.currentPrice > 0
+          ? (data.currentPrice - entry.price) * entry.shares
+          : 0;
+
+        tr.innerHTML = `
+          <td>${entry.no}</td>
+          <td>${hasValue ? formatNumber(entry.lot) : '-'}</td>
+          <td>${hasValue ? formatCurrency(entry.price) : '-'}</td>
+          <td>${hasValue ? formatCurrency(entry.shares) : '-'}</td>
+          <td>${hasValue ? formatCurrency(entry.total) : '-'}</td>
+          <td>${hasValue && data.currentPrice > 0 ? formatCurrency(plValue) : '-'}</td>
+        `;
+        exportTableBody.appendChild(tr);
+      });
+    }
+
+    function prepareExportSheet(data) {
+      const now = new Date();
+
+      exportStockName.textContent = data.stockName;
+      exportDate.textContent = now.toLocaleString('id-ID');
+      exportTotalLot.textContent = formatNumber(data.totalLot);
+      exportAveragePrice.textContent = formatNumber(data.averagePrice);
+      exportTotalValue.textContent = formatCurrency(data.totalInvested);
+      exportCurrentPrice.textContent = formatCurrency(data.currentPrice);
+      exportProfitLoss.textContent = `${formatPercent(data.profitLossPercent)} (${formatCurrency(data.profitLossValue)})`;
+      exportProfitLoss.style.color =
+        data.profitLossPercent > 0 ? '#12824c' :
+        data.profitLossPercent < 0 ? '#b4235a' :
+        '#7a3d5a';
+
+      exportFinalValue.textContent = formatCurrency(data.finalValue);
+      exportFinalValue.style.color =
+        data.profitLossPercent > 0 ? '#12824c' :
+        data.profitLossPercent < 0 ? '#ffd7e8' :
+        '#ffffff';
+
+      buildExportTable(data);
+    }
+
+    async function exportAsJpg() {
+      const data = calculateAverage();
+      prepareExportSheet(data);
+
+      const canvas = await html2canvas(exportSheet, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        width: exportSheet.scrollWidth,
+        height: exportSheet.scrollHeight,
+        windowWidth: exportSheet.scrollWidth,
+        windowHeight: exportSheet.scrollHeight
+      });
+
+      const link = document.createElement('a');
+      const stockName = data.stockName === '-' ? 'averaging-calculator' : normalizeFileName(data.stockName);
+      link.download = `${stockName}-detail-pembelian.jpg`;
+      link.href = canvas.toDataURL('image/jpeg', 0.95);
+      link.click();
+    }
+
+    createRows();
+    resetForm();
+
+    calcBtn.addEventListener('click', calculateAverage);
+    resetBtn.addEventListener('click', resetForm);
+    exportBtn.addEventListener('click', exportAsJpg);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') calculateAverage();
+    });
+  </script>
+</body>
+</html>
       --panel-top: rgba(191, 52, 132, 0.9);
       --panel-bottom: rgba(214, 82, 154, 0.78);
       --summary-top: rgba(122, 20, 82, 0.96);
