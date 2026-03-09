@@ -738,12 +738,13 @@
       }
     }
 
-    /* MOBILE LANDSCAPE 9:16 STYLE */
+    /* MOBILE LANDSCAPE SCROLLABLE */
     @media (max-width: 932px) and (orientation: landscape) {
       html,
       body {
-        height: 100%;
-        overflow: hidden;
+        height: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
 
       .app-shell {
@@ -753,9 +754,9 @@
 
       .phone-card {
         min-height: 100dvh;
-        height: 100dvh;
+        height: auto;
         padding: 8px 12px 10px;
-        overflow: hidden;
+        overflow: visible;
         gap: 6px;
       }
 
