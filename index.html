@@ -480,8 +480,8 @@
       color: rgba(255,255,255,0.82);
     }
 
-    /* MOBILE COMPACT DESKTOP-LIKE */
-    @media (max-width: 768px) {
+    /* MOBILE PORTRAIT COMPACT */
+    @media (max-width: 768px) and (orientation: portrait) {
       html,
       body {
         height: 100%;
@@ -538,7 +538,7 @@
       }
 
       .stock-row {
-        grid-template-columns: 0.95fr 1.85fr !important;
+        grid-template-columns: 0.95fr 1.85fr;
         gap: 8px;
         margin-bottom: 8px;
         align-items: center;
@@ -550,7 +550,7 @@
       }
 
       .stock-input-group {
-        grid-template-columns: 1fr 0.78fr !important;
+        grid-template-columns: 1fr 0.78fr;
       }
 
       .current-price-wrap {
@@ -594,7 +594,7 @@
       }
 
       .summary-grid {
-        grid-template-columns: 1.2fr 0.9fr !important;
+        grid-template-columns: 1.2fr 0.9fr;
         gap: 12px;
         align-items: start;
       }
@@ -661,7 +661,7 @@
       }
     }
 
-    @media (max-width: 768px) and (max-height: 740px) {
+    @media (max-width: 768px) and (max-height: 740px) and (orientation: portrait) {
       .brand {
         font-size: 10px;
         margin-left: 36px;
@@ -734,6 +734,178 @@
       }
 
       .desktop-hint {
+        font-size: 8px;
+      }
+    }
+
+    /* MOBILE LANDSCAPE 9:16 STYLE */
+    @media (max-width: 932px) and (orientation: landscape) {
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .app-shell {
+        min-height: 100dvh;
+        max-width: 100%;
+      }
+
+      .phone-card {
+        min-height: 100dvh;
+        height: 100dvh;
+        padding: 8px 12px 10px;
+        overflow: hidden;
+        gap: 6px;
+      }
+
+      .brand {
+        margin: 0 0 2px 38px;
+        font-size: 11px;
+        line-height: 1;
+      }
+
+      .top-row {
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+
+      .back-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+      }
+
+      .back-btn::before {
+        font-size: 14px;
+      }
+
+      .title {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .form-panel {
+        padding: 10px 12px;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(88, 14, 59, 0.22);
+      }
+
+      .stock-row {
+        grid-template-columns: 0.9fr 1.9fr;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+
+      .stock-label {
+        text-align: right;
+        font-size: 18px;
+      }
+
+      .stock-input-group {
+        grid-template-columns: 1fr 0.72fr;
+      }
+
+      .current-price-wrap {
+        border-left: 2px solid rgba(255, 135, 190, 0.9);
+        border-top: 0;
+      }
+
+      .headers {
+        grid-template-columns: 28px 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+
+      .col-title {
+        font-size: 12px;
+      }
+
+      .entry-row {
+        grid-template-columns: 28px 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+
+      .row-index {
+        font-size: 16px;
+      }
+
+      .field,
+      .stock-input-group .field {
+        min-height: 32px;
+        height: 32px;
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 9px;
+      }
+
+      .summary-panel {
+        margin-top: 6px;
+        padding: 10px 12px;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(88, 14, 59, 0.22);
+      }
+
+      .summary-grid {
+        grid-template-columns: 1.2fr 0.9fr;
+        gap: 12px;
+      }
+
+      .summary-left {
+        gap: 6px;
+      }
+
+      .summary-line {
+        grid-template-columns: minmax(105px, auto) 1fr;
+        gap: 6px;
+        font-size: 11px;
+        line-height: 1.1;
+      }
+
+      .history-box {
+        border-left: 2px solid rgba(255, 199, 225, 0.65);
+        border-top: 0;
+        padding-left: 10px;
+        padding-top: 0;
+      }
+
+      .history-title {
+        margin: 0 0 6px;
+        font-size: 12px;
+      }
+
+      .history-list {
+        gap: 4px;
+      }
+
+      .history-row {
+        grid-template-columns: 16px 1fr;
+        gap: 5px;
+        font-size: 9px;
+        min-height: 12px;
+      }
+
+      .note {
+        margin: 6px 0 6px;
+        font-size: 9px;
+        line-height: 1.1;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+      }
+
+      .btn {
+        min-height: 34px;
+        height: 34px;
+        font-size: 11px;
+        border-radius: 12px;
+      }
+
+      .desktop-hint {
+        margin-top: 4px;
         font-size: 8px;
       }
     }
@@ -1080,13 +1252,19 @@
           ? (data.currentPrice - entry.price) * entry.shares
           : 0;
 
+        let plColor = '#ffffff';
+        if (plValue > 0) plColor = '#9cffb1';
+        if (plValue < 0) plColor = '#ff4d6d';
+
         tr.innerHTML = `
           <td>${entry.no}</td>
           <td>${hasValue ? formatNumber(entry.lot) : '-'}</td>
           <td>${hasValue ? formatCurrency(entry.price) : '-'}</td>
           <td>${hasValue ? formatCurrency(entry.shares) : '-'}</td>
           <td>${hasValue ? formatCurrency(entry.total) : '-'}</td>
-          <td>${hasValue && data.currentPrice > 0 ? formatCurrency(plValue) : '-'}</td>
+          <td style="color:${hasValue && data.currentPrice > 0 ? plColor : '#ffffff'}; font-weight:700;">
+            ${hasValue && data.currentPrice > 0 ? formatCurrency(plValue) : '-'}
+          </td>
         `;
         exportTableBody.appendChild(tr);
       });
@@ -1103,14 +1281,14 @@
       exportCurrentPrice.textContent = formatCurrency(data.currentPrice);
       exportProfitLoss.textContent = `${formatPercent(data.profitLossPercent)} (${formatCurrency(data.profitLossValue)})`;
       exportProfitLoss.style.color =
-        data.profitLossPercent > 0 ? '#12824c' :
-        data.profitLossPercent < 0 ? '#b4235a' :
-        '#7a3d5a';
+        data.profitLossPercent > 0 ? '#9cffb1' :
+        data.profitLossPercent < 0 ? '#ff4d6d' :
+        '#ffffff';
 
       exportFinalValue.textContent = formatCurrency(data.finalValue);
       exportFinalValue.style.color =
-        data.profitLossPercent > 0 ? '#12824c' :
-        data.profitLossPercent < 0 ? '#ffd7e8' :
+        data.profitLossPercent > 0 ? '#9cffb1' :
+        data.profitLossPercent < 0 ? '#ffb3c1' :
         '#ffffff';
 
       buildExportTable(data);
